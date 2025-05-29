@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, useWindowDimensions, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export default function CadastroScreen() {
   const { width } = useWindowDimensions();
@@ -24,7 +25,7 @@ export default function CadastroScreen() {
         <Ionicons name="chevron-back-outline" size={30} color="#003D4C" />
       </TouchableOpacity>
 
-      {/* Área fixa para a logo */}
+      {/* Logo */}
       <View style={styles.logoContainer}>
         <Image
           source={require('../assets/images/splash-chave.png')}
@@ -96,8 +97,15 @@ export default function CadastroScreen() {
         style={[styles.botao, { backgroundColor: podeCadastrar ? '#003d4c' : '#003D4C' }]}
         onPress={() => {
           if (podeCadastrar) {
-            alert('Cadastro realizado com sucesso!');
-            router.replace('/login');
+            Toast.show({
+              type: 'success',
+              text1: 'Sucesso!',
+              text2: 'Cadastro realizado com sucesso 👏',
+            });
+
+            setTimeout(() => {
+              router.replace('/login');
+            }, 2000);
           }
         }}
         disabled={!podeCadastrar}
@@ -162,6 +170,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: '#003D4C',
     fontWeight: '500',
+    outlineWidth:0
   },
   botao: {
     marginTop: 20,

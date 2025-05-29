@@ -1,188 +1,265 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
-  Dimensions,
-  FlatList,
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
-} from 'react-native';
+  Text,
+  TouchableOpacity,
+  Image,
+  TextInput,
+  ScrollView,
+  StyleSheet,
+  SafeAreaView,
+  Platform,
+  StatusBar,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 
-const { width } = Dimensions.get('window');
-
-const imagensPropaganda = [
-  require('../assets/images/promo1.png'),
-  require('../assets/images/promo2.png'),
-  require('../assets/images/promo3.png'),
-  require('../assets/images/promocao.png'),
+const promoImages = [
+  require("../assets/images/promo1.png"),
+  require("../assets/images/promo2.png"),
+  require("../assets/images/promo3.png"),
 ];
 
-// Ícones para cada ação (pode ajustar conforme seus ícones)
-const acoes = [
-  { key: 'veiculos', label: 'Meus Veículos', icon: 'car-sport', screen: 'Veiculos' },
-  { key: 'oficinas', label: 'Minhas Oficinas', icon: 'build', screen: 'Oficinas' },
-  { key: 'notificacoes', label: 'Minhas Notificações', icon: 'notifications', screen: 'Notificacoes' },
-  { key: 'promocoes', label: 'Promoções', icon: 'local-offer', screen: 'Promocoes' },
+const bottomTabs = [
+  { label: "Home", icon: "home-outline", route: "/" },
+  { label: "Minha Conta", icon: "person-outline", route: "/minha-conta" },
+  { label: "Ajuda", icon: "help-circle-outline", route: "/ajuda" },
+  { label: "Fale Conosco", icon: "chatbubble-ellipses-outline", route: "/fale-conosco" },
+  { label: "Perfil", icon: "settings-outline", route: "/perfil" },
 ];
 
-export default function Conta({ route }) {
-  const navigation = useNavigation();
-
-  // Simulação do nome vindo do cadastro
-  const nomeUsuario = route?.params?.nomeUsuario || 'Usuário';
-
-  // Estado para troca automática da propaganda
-  const [propIndex, setPropIndex] = useState(0);
+export default function Home() {
+  const router = useRouter();
+  const [promoIndex, setPromoIndex] = useState(0);
+  const [activeTab, setActiveTab] = useState("Home");
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setPropIndex((prev) => (prev + 1) % imagensPropaganda.length);
-    }, 6000); // troca a cada 6s
-    return () => clearInterval(timer);
+    const interval = setInterval(() => {
+      setPromoIndex((prev) => (prev + 1) % promoImages.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Renderiza item da lista de ações
-  function renderAcao({ item }) {
-    return (
-      <TouchableOpacity
-        style={styles.itemAcao}
-        onPress={() => navigation.navigate(item.screen)}
-      >
-        <Ionicons name={item.icon} size={24} color="#003D4C" />
-        <Text style={styles.textoAcao}>{item.label}</Text>
-        <Ionicons name="chevron-forward" size={20} color="#003D4C" />
-      </TouchableOpacity>
-    );
-  }
+  const buttonIcons = {
+    "Meus veículos": "car-sport-outline",
+    "Minhas oficinas": "build-outline",
+    "Notificações": "notifications-outline",
+    "Promoções": "pricetag-outline",
+    "Minhas Quilometragens": "speedometer-outline",
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Topo */}
-      <View style={styles.topo}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={28} color="#fff" />
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* Cabeçalho azul com bordas arredondadas na parte inferior */}
+      <View style={styles.header}>
+        <TouchableOpacity activeOpacity={0.7}>
+          <Ionicons
+            name="notifications-outline"
+            size={22}
+            color="#fff"
+            style={{ marginTop: -22 }} // Ajuste para subir o sininho
+          />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
-          <Ionicons name="notifications" size={28} color="#fff" />
-        </TouchableOpacity>
       </View>
 
-      {/* Saudação */}
-      <View style={styles.saudacao}>
-        <Image
-          source={require('../assets/images/splash-chave.png')}
-          style={styles.logoChave}
-          resizeMode="contain"
-        />
-        <Text style={styles.textoSaudacao}>Bem-vindo(a), {nomeUsuario}</Text>
-      </View>
+      {/* Conteúdo principal */}
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* Logo centralizada */}
+          <Image
+            source={require("../assets/images/splash-chave.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
 
-      {/* Propaganda */}
-      <View style={styles.propaganda}>
-        <Image
-          source={imagensPropaganda[propIndex]}
-          style={styles.imagemPropaganda}
-          resizeMode="contain"
-        />
-      </View>
+          {/* Barra de pesquisa */}
+          <View style={styles.searchContainer}>
+            <Ionicons name="search-outline" size={20} color="#003D4C" />
+            <TextInput
+              placeholder="Pesquisar"
+              placeholderTextColor="#003D4C"
+              style={styles.input}
+              accessibilityLabel="Campo de pesquisa"
+              accessible
+            />
+          </View>
 
-      {/* Ações */}
-      <FlatList
-        data={acoes}
-        renderItem={renderAcao}
-        keyExtractor={(item) => item.key}
-        style={styles.listaAcoes}
-        scrollEnabled={false}
-      />
+          {/* Imagem promocional rotativa */}
+          <View style={styles.promoContainer}>
+            <Image
+              source={promoImages[promoIndex]}
+              style={{ width: "100%", height: "100%" }}
+              resizeMode="cover"
+            />
+          </View>
 
-      {/* Barra de busca no rodapé */}
-      <View style={styles.rodape}>
-        <Ionicons name="search" size={24} color="#003D4C" style={{ marginHorizontal: 8 }} />
-        <TextInput
-          placeholder="Buscar..."
-          placeholderTextColor="#666"
-          style={styles.inputBusca}
-        />
+          {/* Botões navegáveis com padrão original */}
+          <View style={{ gap: 16, width: "100%" }}>
+            {[
+              { label: "Meus veículos", route: "/meus-veiculos" },
+              { label: "Minhas oficinas", route: "/minhas-oficinas" },
+              { label: "Notificações", route: "/notificacoes" },
+              { label: "Promoções", route: "/promocoes" },
+              { label: "Minhas Quilometragens", route: "/minhas-quilometragens" },
+            ].map(({ label, route }) => (
+              <TouchableOpacity
+                key={label}
+                onPress={() => router.push(route)}
+                style={styles.button}
+                accessibilityLabel={`Botão ${label}`}
+                accessible
+              >
+                <Ionicons
+                  name={buttonIcons[label]}
+                  size={24}
+                  color="#003D4C"
+                  style={{ marginRight: 12 }}
+                />
+                <Text style={styles.buttonText}>{label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+
+      {/* Barra fixa inferior elegante */}
+      <View style={styles.bottomBar}>
+        {bottomTabs.map(({ label, icon, route }) => {
+          const focused = activeTab === label;
+          return (
+            <TouchableOpacity
+              key={label}
+              onPress={() => {
+                setActiveTab(label);
+                router.push(route);
+              }}
+              style={[styles.bottomTabButton, focused && styles.bottomTabButtonActive]}
+              accessibilityLabel={`Botão ${label}`}
+              accessible
+              activeOpacity={0.7}
+            >
+              <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
+                <Ionicons
+                  name={icon}
+                  size={focused ? 28 : 24}
+                  color={focused ? "#003D4C" : "#ccc"}
+                />
+              </View>
+              <Text style={[styles.bottomTabText, focused && styles.bottomTabTextActive]}>
+                {label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  topo: {
-    backgroundColor: '#003D4C',
+  header: {
     height: 50,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 15,
+    backgroundColor: "#003D4C",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
-  saudacao: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
+  container: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    alignItems: "center",
   },
-  logoChave: {
-    width: 40,
-    height: 40,
-    marginRight: 12,
+  logo: {
+    width: 70,
+    height: 70,
+    marginVertical: 10,
   },
-  textoSaudacao: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#003D4C',
-  },
-  propaganda: {
-    marginVertical: 15,
-    alignItems: 'center',
-  },
-  imagemPropaganda: {
-    width: width * 0.9,
-    height: 120,
-    borderRadius: 10,
-  },
-  listaAcoes: {
-    marginHorizontal: 15,
-  },
-  itemAcao: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
-  },
-  textoAcao: {
-    flex: 1,
-    marginLeft: 12,
-    fontSize: 16,
-    color: '#003D4C',
-    fontWeight: '600',
-  },
-  rodape: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderColor: '#ccc',
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    borderColor: "#003D4C",
+    borderWidth: 1,
+    borderRadius: 8,
     paddingHorizontal: 10,
-    paddingVertical: 8,
-    backgroundColor: '#f9f9f9',
+    height: 42,
+    width: "100%",
+    marginBottom: 20,
   },
-  inputBusca: {
+  input: {
     flex: 1,
-    fontSize: 16,
-    paddingVertical: 4,
-    color: '#003D4C',
+    marginLeft: 8,
+    color: "#003D4C",
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  promoContainer: {
+    height: 120,
+    width: "100%",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 20,
+  },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#003D4C",
+    shadowColor: "#003D4C",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    width: "100%",
+  },
+  buttonText: {
+    color: "#003D4C",
+    fontWeight: "600",
+    fontSize: 17,
+  },
+  bottomBar: {
+    height: 70,
+    backgroundColor: "#003D4C",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingBottom: Platform.OS === "ios" ? 20 : 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: -3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 10,
+  },
+  bottomTabButton: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  bottomTabButtonActive: {
+    // Pode adicionar mais estilos se quiser
+  },
+  iconWrapper: {
+    padding: 6,
+    borderRadius: 20,
+  },
+  iconWrapperActive: {
+    backgroundColor: "#CCE5FF",
+  },
+  bottomTabText: {
+    fontSize: 12,
+    color: "#ccc",
+    marginTop: 4,
+    fontWeight: "400",
+    fontFamily: "System",
+  },
+  bottomTabTextActive: {
+    color: "#fff",
+    fontWeight: "600",
   },
 });

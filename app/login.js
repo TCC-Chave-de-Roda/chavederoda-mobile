@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: "#003D4C",
     fontWeight: "500",
+    outlineWidth:0
   },
   erro: {
     color: "#DC2626",

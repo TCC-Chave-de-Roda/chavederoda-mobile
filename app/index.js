@@ -1,13 +1,13 @@
 import { router } from 'expo-router';
 import React from 'react';
 import {
-    Image,
-    Platform,
-    SafeAreaView,
-    Text,
-    TouchableOpacity,
-    useWindowDimensions,
-    View,
+  Image,
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
 } from 'react-native';
 
 export default function WelcomeScreen() {
