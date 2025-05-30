@@ -1,18 +1,20 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  TextInput,
-  ScrollView,
-  StyleSheet,
-  SafeAreaView,
-  Platform,
-  StatusBar,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import React, { useEffect, useState } from "react";
+import {
+  Image,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const promoImages = [
   require("../assets/images/promo1.png"),
@@ -24,7 +26,11 @@ const bottomTabs = [
   { label: "Home", icon: "home-outline", route: "/" },
   { label: "Minha Conta", icon: "person-outline", route: "/minha-conta" },
   { label: "Ajuda", icon: "help-circle-outline", route: "/ajuda" },
-  { label: "Fale Conosco", icon: "chatbubble-ellipses-outline", route: "/fale-conosco" },
+  {
+    label: "Fale Conosco",
+    icon: "chatbubble-ellipses-outline",
+    route: "/fale-conosco",
+  },
   { label: "Perfil", icon: "settings-outline", route: "/perfil" },
 ];
 
@@ -32,6 +38,9 @@ export default function Home() {
   const router = useRouter();
   const [promoIndex, setPromoIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("Home");
+
+  // Pega o espaço reservado pela barra de navegação (safe area insets)
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -43,29 +52,35 @@ export default function Home() {
   const buttonIcons = {
     "Meus veículos": "car-sport-outline",
     "Minhas oficinas": "build-outline",
-    "Notificações": "notifications-outline",
-    "Promoções": "pricetag-outline",
+    Notificações: "notifications-outline",
+    Promoções: "pricetag-outline",
     "Minhas Quilometragens": "speedometer-outline",
   };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* Cabeçalho azul com bordas arredondadas na parte inferior */}
+      {/* Cabeçalho azul */}
       <View style={styles.header}>
         <TouchableOpacity activeOpacity={0.7}>
           <Ionicons
             name="notifications-outline"
-            size={22}
+            size={20}
             color="#fff"
-            style={{ marginTop: -22 }} // Ajuste para subir o sininho
+            style={{ marginTop: -2 }}
           />
         </TouchableOpacity>
       </View>
 
       {/* Conteúdo principal */}
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView contentContainerStyle={styles.container}>
-          {/* Logo centralizada */}
+        <ScrollView
+          contentContainerStyle={[
+            styles.container,
+            { paddingBottom: 70 + insets.bottom }, // espaço do bottomBar + inset da barra do sistema
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Logo */}
           <Image
             source={require("../assets/images/splash-chave.png")}
             style={styles.logo}
@@ -84,7 +99,7 @@ export default function Home() {
             />
           </View>
 
-          {/* Imagem promocional rotativa */}
+          {/* Imagem promocional */}
           <View style={styles.promoContainer}>
             <Image
               source={promoImages[promoIndex]}
@@ -93,14 +108,17 @@ export default function Home() {
             />
           </View>
 
-          {/* Botões navegáveis com padrão original */}
+          {/* Botões */}
           <View style={{ gap: 16, width: "100%" }}>
             {[
               { label: "Meus veículos", route: "/meus-veiculos" },
               { label: "Minhas oficinas", route: "/minhas-oficinas" },
               { label: "Notificações", route: "/notificacoes" },
               { label: "Promoções", route: "/promocoes" },
-              { label: "Minhas Quilometragens", route: "/minhas-quilometragens" },
+              {
+                label: "Minhas Quilometragens",
+                route: "/minhas-quilometragens",
+              },
             ].map(({ label, route }) => (
               <TouchableOpacity
                 key={label}
@@ -122,8 +140,16 @@ export default function Home() {
         </ScrollView>
       </SafeAreaView>
 
-      {/* Barra fixa inferior elegante */}
-      <View style={styles.bottomBar}>
+      {/* Barra fixa inferior */}
+      <View
+        style={[
+          styles.bottomBar,
+          {
+            paddingBottom: insets.bottom, // cria um padding interno para respeitar a barra do sistema
+            height: 70 + insets.bottom, // aumenta a altura para não ficar atrás da barra do sistema
+          },
+        ]}
+      >
         {bottomTabs.map(({ label, icon, route }) => {
           const focused = activeTab === label;
           return (
@@ -133,19 +159,32 @@ export default function Home() {
                 setActiveTab(label);
                 router.push(route);
               }}
-              style={[styles.bottomTabButton, focused && styles.bottomTabButtonActive]}
+              style={[
+                styles.bottomTabButton,
+                focused && styles.bottomTabButtonActive,
+              ]}
               accessibilityLabel={`Botão ${label}`}
               accessible
               activeOpacity={0.7}
             >
-              <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
+              <View
+                style={[
+                  styles.iconWrapper,
+                  focused && styles.iconWrapperActive,
+                ]}
+              >
                 <Ionicons
                   name={icon}
                   size={focused ? 28 : 24}
                   color={focused ? "#003D4C" : "#ccc"}
                 />
               </View>
-              <Text style={[styles.bottomTabText, focused && styles.bottomTabTextActive]}>
+              <Text
+                style={[
+                  styles.bottomTabText,
+                  focused && styles.bottomTabTextActive,
+                ]}
+              >
                 {label}
               </Text>
             </TouchableOpacity>
@@ -158,14 +197,14 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   header: {
-    height: 50,
+    height: 70,
     backgroundColor: "#003D4C",
     justifyContent: "center",
     alignItems: "flex-end",
     paddingHorizontal: 20,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
   container: {
     paddingHorizontal: 20,
@@ -225,24 +264,22 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   bottomBar: {
-    height: 70,
     backgroundColor: "#003D4C",
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingBottom: Platform.OS === "ios" ? 20 : 0,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: -3 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 10,
+    elevation: 20,
   },
   bottomTabButton: {
     justifyContent: "center",
     alignItems: "center",
   },
   bottomTabButtonActive: {
-    // Pode adicionar mais estilos se quiser
+    // estilos adicionais
   },
   iconWrapper: {
     padding: 6,
