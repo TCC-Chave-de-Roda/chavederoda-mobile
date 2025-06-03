@@ -101,6 +101,7 @@ export default function CadastroScreen() {
               type: 'success',
               text1: 'Sucesso!',
               text2: 'Cadastro realizado com sucesso 👏',
+              visibilityTime: 1000,
             });
 
             setTimeout(() => {

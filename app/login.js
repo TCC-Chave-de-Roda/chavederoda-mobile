@@ -32,7 +32,7 @@ export default function LoginScreen() {
       Toast.show({
         type: "success",
         text1: "Login realizado com sucesso!",
-        position: "bottom",
+        visibilityTime: 1000,
       });
       setEmail("");
       setSenha("");

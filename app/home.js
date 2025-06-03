@@ -3,18 +3,13 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
   Image,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
+  Pressable,
 } from "react-native";
-
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const promoImages = [
   require("../assets/images/promo1.png"),
@@ -22,25 +17,9 @@ const promoImages = [
   require("../assets/images/promo3.png"),
 ];
 
-const bottomTabs = [
-  { label: "Home", icon: "home-outline", route: "/" },
-  { label: "Minha Conta", icon: "person-outline", route: "/minha-conta" },
-  { label: "Ajuda", icon: "help-circle-outline", route: "/ajuda" },
-  {
-    label: "Fale Conosco",
-    icon: "chatbubble-ellipses-outline",
-    route: "/fale-conosco",
-  },
-  { label: "Perfil", icon: "settings-outline", route: "/perfil" },
-];
-
 export default function Home() {
   const router = useRouter();
   const [promoIndex, setPromoIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("Home");
-
-  // Pega o espaço reservado pela barra de navegação (safe area insets)
-  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,57 +28,55 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const buttonIcons = {
-    "Meus veículos": "car-sport-outline",
-    "Minhas oficinas": "build-outline",
-    Notificações: "notifications-outline",
-    Promoções: "pricetag-outline",
-    "Minhas Quilometragens": "speedometer-outline",
-  };
+  const userName = "Usuário";
+
+  const cards = [
+    {
+      label: "Meus veículos",
+      subtitle: "Visualize e gerencie seus veículos",
+      icon: "car-sport-outline",
+      route: "/meus-veiculos",
+    },
+    {
+      label: "Minhas oficinas",
+      subtitle: "Veja suas oficinas cadastradas",
+      icon: "build-outline",
+      route: "/minhas-oficinas",
+    },
+    {
+      label: "Notificações",
+      subtitle: "Mensagens e alertas importantes",
+      icon: "notifications-outline",
+      route: "/notificacoes",
+    },
+    {
+      label: "Promoções",
+      subtitle: "Ofertas exclusivas pra você",
+      icon: "pricetag-outline",
+      route: "/promocoes",
+    },
+    {
+      label: "Minhas Quilometragens",
+      subtitle: "Histórico de percurso e uso",
+      icon: "speedometer-outline",
+      route: "/minhas-quilometragens",
+    },
+  ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* Cabeçalho azul */}
-      <View style={styles.header}>
-        <TouchableOpacity activeOpacity={0.7}>
-          <Ionicons
-            name="notifications-outline"
-            size={20}
-            color="#fff"
-            style={{ marginTop: -2 }}
-          />
-        </TouchableOpacity>
-      </View>
-
-      {/* Conteúdo principal */}
-      <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+      <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
         <ScrollView
-          contentContainerStyle={[
-            styles.container,
-            { paddingBottom: 70 + insets.bottom }, // espaço do bottomBar + inset da barra do sistema
-          ]}
+          contentContainerStyle={styles.container}
           showsVerticalScrollIndicator={false}
         >
-          {/* Logo */}
-          <Image
-            source={require("../assets/images/splash-chave.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-
-          {/* Barra de pesquisa */}
-          <View style={styles.searchContainer}>
-            <Ionicons name="search-outline" size={20} color="#003D4C" />
-            <TextInput
-              placeholder="Pesquisar"
-              placeholderTextColor="#003D4C"
-              style={styles.input}
-              accessibilityLabel="Campo de pesquisa"
-              accessible
-            />
+          {/* Boas-vindas */}
+          <View style={styles.welcomeContainer}>
+            <Ionicons name="person-circle-outline" size={28} color="#003D4C" />
+            <Text style={styles.welcomeText}>Olá, {userName}</Text>
           </View>
 
-          {/* Imagem promocional */}
+          {/* Promoções */}
           <View style={styles.promoContainer}>
             <Image
               source={promoImages[promoIndex]}
@@ -108,195 +85,104 @@ export default function Home() {
             />
           </View>
 
-          {/* Botões */}
-          <View style={{ gap: 16, width: "100%" }}>
-            {[
-              { label: "Meus veículos", route: "/meus-veiculos" },
-              { label: "Minhas oficinas", route: "/minhas-oficinas" },
-              { label: "Notificações", route: "/notificacoes" },
-              { label: "Promoções", route: "/promocoes" },
-              {
-                label: "Minhas Quilometragens",
-                route: "/minhas-quilometragens",
-              },
-            ].map(({ label, route }) => (
-              <TouchableOpacity
+          {/* Acesso Rápido */}
+          <Text style={styles.sectionTitle}>Acesso Rápido</Text>
+
+          <View style={styles.cardSection}>
+            {cards.map(({ label, subtitle, icon, route }) => (
+              <Pressable
                 key={label}
                 onPress={() => router.push(route)}
-                style={styles.button}
-                accessibilityLabel={`Botão ${label}`}
-                accessible
+                style={({ pressed }) => [
+                  styles.cardButton,
+                  { opacity: pressed ? 0.85 : 1 },
+                ]}
               >
+                <View style={styles.iconWrapper}>
+                  <Ionicons name={icon} size={20} color="#00695C" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.cardTitle}>{label}</Text>
+                  <Text style={styles.cardSubtitle}>{subtitle}</Text>
+                </View>
                 <Ionicons
-                  name={buttonIcons[label]}
-                  size={24}
-                  color="#003D4C"
-                  style={{ marginRight: 12 }}
+                  name="chevron-forward-outline"
+                  size={20}
+                  color="#999"
                 />
-                <Text style={styles.buttonText}>{label}</Text>
-              </TouchableOpacity>
+              </Pressable>
             ))}
           </View>
         </ScrollView>
       </SafeAreaView>
-
-      {/* Barra fixa inferior */}
-      <View
-        style={[
-          styles.bottomBar,
-          {
-            paddingBottom: insets.bottom, // cria um padding interno para respeitar a barra do sistema
-            height: 70 + insets.bottom, // aumenta a altura para não ficar atrás da barra do sistema
-          },
-        ]}
-      >
-        {bottomTabs.map(({ label, icon, route }) => {
-          const focused = activeTab === label;
-          return (
-            <TouchableOpacity
-              key={label}
-              onPress={() => {
-                setActiveTab(label);
-                router.push(route);
-              }}
-              style={[
-                styles.bottomTabButton,
-                focused && styles.bottomTabButtonActive,
-              ]}
-              accessibilityLabel={`Botão ${label}`}
-              accessible
-              activeOpacity={0.7}
-            >
-              <View
-                style={[
-                  styles.iconWrapper,
-                  focused && styles.iconWrapperActive,
-                ]}
-              >
-                <Ionicons
-                  name={icon}
-                  size={focused ? 28 : 24}
-                  color={focused ? "#003D4C" : "#ccc"}
-                />
-              </View>
-              <Text
-                style={[
-                  styles.bottomTabText,
-                  focused && styles.bottomTabTextActive,
-                ]}
-              >
-                {label}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  header: {
-    height: 70,
-    backgroundColor: "#003D4C",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    paddingHorizontal: 20,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-  },
+const styles = {
   container: {
     paddingHorizontal: 20,
-    paddingBottom: 40,
-    alignItems: "center",
+    paddingTop: 40,
+    paddingBottom: 3,
   },
-  logo: {
-    width: 70,
-    height: 70,
-    marginVertical: 10,
-  },
-  searchContainer: {
+  welcomeContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    borderColor: "#003D4C",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    height: 42,
-    width: "100%",
-    marginBottom: 20,
+    marginBottom: 13,
+    gap:10,
   },
-  input: {
-    flex: 1,
-    marginLeft: 8,
+  welcomeText: {
     color: "#003D4C",
-    fontSize: 15,
+    fontSize: 23,
     fontWeight: "500",
   },
   promoContainer: {
-    height: 120,
+    height: 110,
     width: "100%",
-    borderRadius: 10,
+    borderRadius: 14,
     overflow: "hidden",
-    marginBottom: 20,
+    backgroundColor: "#eee",
+    marginBottom: 24,
   },
-  button: {
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#003D4C",
+    marginBottom: 9,
+
+  },
+  cardSection: {
+    gap: 13,
+  },
+  cardButton: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#003D4C",
-    shadowColor: "#003D4C",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-    width: "100%",
-  },
-  buttonText: {
-    color: "#003D4C",
-    fontWeight: "600",
-    fontSize: 17,
-  },
-  bottomBar: {
-    backgroundColor: "#003D4C",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+    padding: 12,
+    borderRadius: 14,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 20,
-  },
-  bottomTabButton: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bottomTabButtonActive: {
-    // estilos adicionais
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 4,
+    elevation: 3,
   },
   iconWrapper: {
-    padding: 6,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 100,
+    backgroundColor: "#E0F2F1", // verde claro da paleta
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 14,
   },
-  iconWrapperActive: {
-    backgroundColor: "#CCE5FF",
-  },
-  bottomTabText: {
-    fontSize: 12,
-    color: "#ccc",
-    marginTop: 4,
-    fontWeight: "400",
-    fontFamily: "System",
-  },
-  bottomTabTextActive: {
-    color: "#fff",
+  cardTitle: {
+    fontSize: 16,
     fontWeight: "600",
+    color: "#003D4C",
   },
-});
+  cardSubtitle: {
+    fontSize: 13,
+    color: "#6B7280",
+    marginTop: 2,
+  },
+};
