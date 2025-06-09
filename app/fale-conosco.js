@@ -1,16 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 
-export default function MinhaConta() {
+export default function FaleConosco() {
   const router = useRouter();
 
   return (
@@ -21,38 +21,28 @@ export default function MinhaConta() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backTouch}>
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Minha Conta</Text>
+          <Text style={styles.headerTitle}>Fale Conosco</Text>
           <View style={{ width: 28 }} />
         </View>
 
         <Text style={styles.subtitulo}>
-          Veja as informações da sua conta cadastrada no sistema.
+          Estamos aqui para te ajudar. Confira abaixo as formas de contato.
         </Text>
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>👤 Nome completo</Text>
-            <Text style={styles.valor}>João da Silva</Text>
-          </View>
-
-          <View style={styles.card}>
             <Text style={styles.label}>📧 E-mail</Text>
-            <Text style={styles.valor}>joao@email.com</Text>
+            <Text style={styles.valor}>suporte@chavederoda.com.br</Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📱 Telefone</Text>
-            <Text style={styles.valor}>(11) 98765-4321</Text>
+            <Text style={styles.label}>📞 Telefone</Text>
+            <Text style={styles.valor}>0800 123 456</Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>🆔 CPF</Text>
-            <Text style={styles.valor}>123.456.789-00</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.label}>🎂 Data de nascimento</Text>
-            <Text style={styles.valor}>01/01/1990</Text>
+            <Text style={styles.label}>⏰ Atendimento</Text>
+            <Text style={styles.valor}>Segunda a sexta, das 08h às 18h</Text>
           </View>
         </ScrollView>
       </View>

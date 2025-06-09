@@ -171,7 +171,7 @@ export default function MeusVeiculos() {
         {/* Modal */}
         <Modal
           visible={modalVisible}
-          animationType="slide"
+          animati onType="slide"
           transparent
           onRequestClose={() => setModalVisible(false)}
         >

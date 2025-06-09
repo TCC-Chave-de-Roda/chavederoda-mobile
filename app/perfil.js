@@ -10,51 +10,51 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-export default function MinhaConta() {
+export default function Perfil() {
   const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+
         {/* Cabeçalho */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()} style={styles.backTouch}>
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Minha Conta</Text>
+          <Text style={styles.headerTitle}>Perfil</Text>
           <View style={{ width: 28 }} />
         </View>
 
+        {/* Subtítulo */}
         <Text style={styles.subtitulo}>
-          Veja as informações da sua conta cadastrada no sistema.
+          Aqui você encontra orientações sobre alterações de dados no seu perfil.
         </Text>
 
+        {/* Cards informativos */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>👤 Nome completo</Text>
-            <Text style={styles.valor}>João da Silva</Text>
+            <Text style={styles.label}>🔒 Alteração de dados</Text>
+            <Text style={styles.valor}>
+              Seus dados podem ser atualizados apenas por uma de nossas oficinas parceiras.
+            </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📧 E-mail</Text>
-            <Text style={styles.valor}>joao@email.com</Text>
+            <Text style={styles.label}>📞 Como alterar?</Text>
+            <Text style={styles.valor}>
+              Entre em contato com a oficina vinculada ao seu cadastro e solicite a atualização desejada.
+            </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📱 Telefone</Text>
-            <Text style={styles.valor}>(11) 98765-4321</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.label}>🆔 CPF</Text>
-            <Text style={styles.valor}>123.456.789-00</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.label}>🎂 Data de nascimento</Text>
-            <Text style={styles.valor}>01/01/1990</Text>
+            <Text style={styles.label}>🤝 Estamos aqui!</Text>
+            <Text style={styles.valor}>
+              Se tiver dúvidas, acesse a tela de Ajuda ou entre em contato pelo suporte.
+            </Text>
           </View>
         </ScrollView>
+
       </View>
     </SafeAreaView>
   );

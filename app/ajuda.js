@@ -10,7 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
-export default function MinhaConta() {
+export default function Ajuda() {
   const router = useRouter();
 
   return (
@@ -21,38 +21,41 @@ export default function MinhaConta() {
           <TouchableOpacity onPress={() => router.back()} style={styles.backTouch}>
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Minha Conta</Text>
+          <Text style={styles.headerTitle}>Ajuda</Text>
           <View style={{ width: 28 }} />
         </View>
 
         <Text style={styles.subtitulo}>
-          Veja as informações da sua conta cadastrada no sistema.
+          Tire suas dúvidas e saiba como utilizar o aplicativo.
         </Text>
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>👤 Nome completo</Text>
-            <Text style={styles.valor}>João da Silva</Text>
+            <Text style={styles.label}>📱 Como utilizar o app?</Text>
+            <Text style={styles.valor}>
+              O aplicativo permite que você consulte informações do seu cadastro, veículos e oficinas vinculadas, além de personalizar seus dados com apelido e foto.
+            </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📧 E-mail</Text>
-            <Text style={styles.valor}>joao@email.com</Text>
+            <Text style={styles.label}>🔐 Esqueci minha senha</Text>
+            <Text style={styles.valor}>
+              Vá para a tela de login e toque em "Esqueci minha senha". Um link será enviado para o seu e-mail de cadastro.
+            </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📱 Telefone</Text>
-            <Text style={styles.valor}>(11) 98765-4321</Text>
+            <Text style={styles.label}>🛠️ Alterar meus dados</Text>
+            <Text style={styles.valor}>
+              A maioria das alterações deve ser feita pelo sistema web. No app, é possível atualizar apelido e foto dos veículos.
+            </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>🆔 CPF</Text>
-            <Text style={styles.valor}>123.456.789-00</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.label}>🎂 Data de nascimento</Text>
-            <Text style={styles.valor}>01/01/1990</Text>
+            <Text style={styles.label}>📧 Suporte</Text>
+            <Text style={styles.valor}>
+              Em caso de dúvidas, envie um e-mail para suporte@chavederoda.com.br.
+            </Text>
           </View>
         </ScrollView>
       </View>
