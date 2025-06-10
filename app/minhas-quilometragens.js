@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Pressable,
-  ScrollView,
-} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  Modal,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function MinhasQuilometragens() {
   const router = useRouter();
@@ -69,7 +69,7 @@ export default function MinhasQuilometragens() {
           <View style={styles.circleIcon}>
             <Ionicons name="pencil-outline" size={20} color="#00695C" />
           </View>
-          <Text style={styles.cardButtonText}>Clique para atualizar sua manutenção</Text>
+          <Text style={styles.cardButtonText}>Clique para atualizar a quilometragem</Text>
         </TouchableOpacity>
 
         <ScrollView style={{ marginTop: 10, marginBottom: 20 }}>
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 14,
     paddingVertical: 18,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     alignItems: "center",
     elevation: 5,
     shadowColor: "#000",
@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
   cardButtonText: {
     color: "#003D4C",
     fontWeight: "600",
-    fontSize: 16,
-    marginLeft: 12,
+    fontSize: 15.5,
+    marginLeft: 10,
   },
   circleIcon: {
     width: 40,
@@ -258,13 +258,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   placaOption: {
-    paddingVertical: 13,
+    paddingVertical: 14,
     paddingHorizontal: 15,
     backgroundColor: "#fff",
     borderRadius: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#f5f5f5",
+    elevation: 2,
   },
   placaOptionSelected: {
     backgroundColor: "#003D4C",

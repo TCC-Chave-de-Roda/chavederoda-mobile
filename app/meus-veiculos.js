@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
-  Alert,
   Modal,
   TextInput,
 } from "react-native";
@@ -38,17 +37,14 @@ export default function MeusVeiculos() {
   ]);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalTipo, setModalTipo] = useState(""); // 'editar' ou 'adicionar'
-  const [veiculoSelecionado, setVeiculoSelecionado] = useState(null);
+  const [veiculoModal, setVeiculoModal] = useState(null);
+  const [modalEditarApelido, setModalEditarApelido] = useState(false);
   const [novoApelido, setNovoApelido] = useState("");
-  const [novoModelo, setNovoModelo] = useState("");
-  const [novaPlaca, setNovaPlaca] = useState("");
-  const [novaCor, setNovaCor] = useState("");
 
   async function escolherFoto(id) {
     let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      Alert.alert("Permissão necessária", "Permita acesso às fotos para escolher uma imagem.");
+      alert("Permita acesso às fotos para escolher uma imagem.");
       return;
     }
 
@@ -64,78 +60,43 @@ export default function MeusVeiculos() {
     }
   }
 
-  function abrirModalEditar(veiculo) {
-    setVeiculoSelecionado(veiculo);
+  function abrirModalPlaca(veiculo) {
+    setVeiculoModal(veiculo);
+    setModalVisible(true);
+  }
+
+  function fecharModal() {
+    setModalVisible(false);
+    setVeiculoModal(null);
+  }
+
+  function abrirModalEditarApelido(veiculo) {
+    setVeiculoModal(veiculo);
     setNovoApelido(veiculo.apelido || "");
-    setModalTipo("editar");
-    setModalVisible(true);
+    setModalEditarApelido(true);
   }
 
-  function abrirModalAdicionar() {
+  function fecharModalEditarApelido() {
+    setModalEditarApelido(false);
+    setVeiculoModal(null);
     setNovoApelido("");
-    setNovoModelo("");
-    setNovaPlaca("");
-    setNovaCor("");
-    setModalTipo("adicionar");
-    setModalVisible(true);
   }
 
-  function salvarEdicao() {
-    setVeiculos((old) =>
-      old.map((v) =>
-        v.id === veiculoSelecionado.id ? { ...v, apelido: novoApelido } : v
-      )
-    );
-    setModalVisible(false);
-  }
-
-  function adicionarVeiculo() {
-    if (!novoModelo || !novaPlaca || !novaCor) {
-      Alert.alert("Preencha todos os campos para adicionar um veículo.");
-      return;
+  function salvarApelido() {
+    if (veiculoModal) {
+      setVeiculos((old) =>
+        old.map((v) =>
+          v.id === veiculoModal.id ? { ...v, apelido: novoApelido } : v
+        )
+      );
     }
-
-    const novoVeiculo = {
-      id: Date.now().toString(),
-      modelo: novoModelo,
-      placa: novaPlaca.toUpperCase(),
-      cor: novaCor,
-      apelido: novoApelido,
-      foto: null,
-    };
-    setVeiculos((old) => [...old, novoVeiculo]);
-    setModalVisible(false);
+    fecharModalEditarApelido();
   }
-
-  const renderItem = ({ item }) => (
-    <View style={styles.containerVeiculo}>
-      <TouchableOpacity onPress={() => abrirModalEditar(item)}>
-        <Text style={styles.apelido}>{item.apelido || "Sem Apelido"}</Text>
-      </TouchableOpacity>
-
-      <View style={styles.card}>
-        <TouchableOpacity onPress={() => escolherFoto(item.id)} style={styles.circuloImagem}>
-          {item.foto ? (
-            <Image source={{ uri: item.foto }} style={styles.foto} />
-          ) : (
-            <Ionicons name="car-outline" size={28} color="#003D4C" />
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.push(`/veiculo/${item.id}`)} style={styles.placaContainer}>
-          <Text style={styles.placa}>{item.placa}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Text style={styles.descritivo}>
-        {item.modelo} • Cor: {item.cor}
-      </Text>
-    </View>
-  );
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
@@ -144,10 +105,12 @@ export default function MeusVeiculos() {
           <View style={{ width: 28 }} />
         </View>
 
+        {/* Subtítulo */}
         <Text style={styles.subTitulo}>
           Acesse os detalhes e o histórico de manutenção dos seus veículos.
         </Text>
 
+        {/* Info */}
         <View style={styles.infoContainer}>
           <Ionicons
             name="information-circle-outline"
@@ -156,88 +119,150 @@ export default function MeusVeiculos() {
             style={{ marginRight: 8 }}
           />
           <Text style={styles.infoTexto}>
-            Selecione a placa do veículo para navegar pelas funcionalidades e serviços de cada um de forma rápida e prática.
+            Selecione a placa do veículo para navegar pelas funcionalidades e
+            serviços de cada um de forma rápida e prática.
           </Text>
         </View>
 
+        {/* Lista veículos */}
         <FlatList
           data={veiculos}
           keyExtractor={(item) => item.id}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <View style={styles.containerVeiculo}>
+              <TouchableOpacity
+                onPress={() => abrirModalEditarApelido(item)}
+                style={{ flexDirection: "row", alignItems: "center", marginLeft: 10, marginBottom: 8 }}
+              >
+                <Text style={[styles.apelido, { textDecorationLine: "none" }]}>
+                  {item.apelido || "Sem Apelido"}
+                </Text>
+                <Ionicons
+                  name="pencil-outline"
+                  size={18}
+                  color="#003D4C"
+                  style={{ marginLeft: 6 }}
+                />
+              </TouchableOpacity>
+
+              <View style={styles.card}>
+                {/* Círculo com foto */}
+                <TouchableOpacity
+                  onPress={() => escolherFoto(item.id)}
+                  style={styles.circuloImagem}
+                >
+                  {item.foto ? (
+                    <Image source={{ uri: item.foto }} style={styles.foto} />
+                  ) : (
+                    <Ionicons name="car-outline" size={28} color="#003D4C" />
+                  )}
+                </TouchableOpacity>
+
+                {/* Placa - agora abre modal */}
+                <TouchableOpacity
+                  onPress={() => abrirModalPlaca(item)}
+                  style={styles.placaContainer}
+                >
+                  <Text style={styles.placa}>{item.placa}</Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.descritivo}>
+                {item.modelo} • Cor: {item.cor}
+              </Text>
+            </View>
+          )}
           contentContainerStyle={{ paddingBottom: 120, paddingTop: 10 }}
           showsVerticalScrollIndicator={false}
         />
 
-        {/* Modal */}
+        {/* Modal ao clicar na placa */}
         <Modal
           visible={modalVisible}
-          animati onType="slide"
+          animationType="slide"
           transparent
           onRequestClose={() => setModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              {modalTipo === "editar" && (
-                <>
-                  <Text style={styles.modalTitle}>Editar Apelido</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={novoApelido}
-                    onChangeText={setNovoApelido}
-                    placeholder="Digite um apelido"
-                  />
-                  <View style={styles.modalButtons}>
-                    <TouchableOpacity style={[styles.modalButton, { backgroundColor: "#003D4C" }]} onPress={salvarEdicao}>
-                      <Text style={styles.modalButtonText}>Salvar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.modalButton, { backgroundColor: "#E0F2F1" }]} onPress={() => setModalVisible(false)}>
-                      <Text style={styles.modalButtonText}>Cancelar</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
+            <View style={[styles.modalContent, { width: "100%" }]}>
+              {/* aumentei a largura aqui */}
+              <Text style={styles.modalTitle}>Opções do Veículo</Text>
+              <Text style={styles.modalDescription}>
+                Selecione uma opção para seu veículo:
+              </Text>
 
-              {modalTipo === "adicionar" && (
-                <>
-                  <Text style={styles.modalTitle}>Adicionar Veículo</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={novoModelo}
-                    onChangeText={setNovoModelo}
-                    placeholder="Modelo"
-                  />
-                  <TextInput
-                    style={styles.input}
-                    value={novaPlaca}
-                    onChangeText={setNovaPlaca}
-                    placeholder="Placa"
-                    autoCapitalize="characters"
-                  />
-                  <TextInput
-                    style={styles.input}
-                    value={novaCor}
-                    onChangeText={setNovaCor}
-                    placeholder="Cor"
-                  />
-                  <TextInput
-                    style={styles.input}
-                    value={novoApelido}
-                    onChangeText={setNovoApelido}
-                    placeholder="Apelido (opcional)"
-                  />
-                  <View style={styles.modalButtons}>
-                    <TouchableOpacity style={[styles.modalButton, { backgroundColor: "#003D4C" }]} onPress={adicionarVeiculo}>
-                      <Text style={styles.modalButtonText}>Adicionar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.modalButton, { backgroundColor: "#999" }]} onPress={() => setModalVisible(false)}>
-                      <Text style={styles.modalButtonText}>Cancelar</Text>
-                    </TouchableOpacity>
-                  </View>
-                </>
-              )}
+              <TouchableOpacity
+                style={[
+  styles.modalButton,
+  {
+    backgroundColor: "#fff",     // fundo branco
+    borderWidth: 1,
+    borderColor: "#f5f5f5",         // borda cinza
+    marginBottom: 15,
+    elevation: 2,
+  }
+]}
+
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push(`/historico/${veiculoModal?.id}`);
+                }}
+              >
+                <Text style={styles.modalButtonText}>
+                  Visualize seu histórico de manutenções realizadas
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: "#E0F2F1" }]}
+                onPress={() => {
+                  setModalVisible(false);
+                  router.push(`/servicos-pendentes/${veiculoModal?.id}`);
+                }}
+              >
+                <Text style={[styles.modalButtonText, { color: "#003d4c" }]}>
+                  Visualize os serviços pendentes do seu veículo
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
+
+        {/* Modal para editar apelido */}
+        <Modal
+          visible={modalEditarApelido}
+          animationType="slide"
+          transparent
+          onRequestClose={fecharModalEditarApelido}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={[styles.modalContent, { width: "90%" }]}>
+              <Text style={styles.modalTitle}>Editar Apelido</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Digite um novo apelido"
+                value={novoApelido}
+                onChangeText={setNovoApelido}
+              />
+              <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+                <TouchableOpacity
+                  style={[styles.modalButton, { backgroundColor: "#E0F2F1", flex: 1, marginRight: 10 }]}
+                  onPress={fecharModalEditarApelido}
+                >
+                  <Text style={[styles.modalButtonText, { color: "#003d4c" }]}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                 style={[styles.modalButton, { backgroundColor: "#003d4c", flex: 1 }]}
+                  onPress={salvarApelido}
+                >
+                  <Text style={[styles.modalButtonText, { color: "#fff" }]}>Salvar</Text>
+
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
       </View>
     </SafeAreaView>
   );
@@ -254,7 +279,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   header: {
-    marginTop: 55, // 👈 espaçamento aumentado
+    marginTop: 55,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -300,11 +325,10 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   apelido: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: "#003D4C",
-    marginBottom: 8,
-    marginLeft: 10,
+    marginBottom: 4
   },
   card: {
     flexDirection: "row",
@@ -319,8 +343,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   circuloImagem: {
-    width: 50,
-    height: 50,
+    width: 55,
+    height: 55,
     borderRadius: 30,
     backgroundColor: "#E0F2F1",
     justifyContent: "center",
@@ -343,7 +367,7 @@ const styles = StyleSheet.create({
   },
   descritivo: {
     fontSize: 14,
-    color: "#555",
+    color: "#003d4c",
     marginTop: 6,
     marginLeft: 10,
   },
@@ -358,35 +382,43 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#fff",
     borderRadius: 14,
-    padding: 20,
+    padding: 40,
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "700",
-    marginBottom: 15,
+    marginBottom: 25,
     color: "#003D4C",
+    textAlign: "center",
+  },
+  modalDescription: {
+    fontSize: 16,
+    marginBottom: 20,
+    color: "#003D4C",
+    textAlign: "center",
+
+  },
+  modalButton: {
+    borderRadius: 9,
+    paddingVertical: 14,
+    paddingHorizontal:15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  modalButtonText: {
+    fontWeight: "600",
+    fontSize: 16,
+    color: "#003d4c",
+    textAlign: "center",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 7,
     padding: 12,
-    marginBottom: 15,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  modalButton: {
-    flex: 1,
-    marginHorizontal: 5,
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: "center",
-  },
-  modalButtonText: {
-    color: "#fff",
-    fontWeight: "600",
     fontSize: 16,
+    color: "#003D4C",
+    backgroundColor: "#Fff",
+    elevation: 2
   },
 });
