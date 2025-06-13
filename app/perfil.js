@@ -34,21 +34,36 @@ export default function Perfil() {
         {/* Cards informativos */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>🔒 Alteração de dados</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="lock-closed-outline" size={20} color="#003d4c" />
+              </View>
+              <Text style={styles.label}>Alteração de dados</Text>
+            </View>
             <Text style={styles.valor}>
               Seus dados podem ser atualizados apenas por uma de nossas oficinas parceiras.
             </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📞 Como alterar?</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="call-outline" size={20} color="#003d4c" />
+              </View>
+              <Text style={styles.label}>Como alterar?</Text>
+            </View>
             <Text style={styles.valor}>
               Entre em contato com a oficina vinculada ao seu cadastro e solicite a atualização desejada.
             </Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>🤝 Estamos aqui!</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="hand-left-outline" size={20} color="#003d4c" />
+              </View>
+              <Text style={styles.label}>Estamos aqui!</Text>
+            </View>
             <Text style={styles.valor}>
               Se tiver dúvidas, acesse a tela de Ajuda ou entre em contato pelo suporte.
             </Text>
@@ -104,11 +119,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
   },
+  labelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  iconCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 16,
+    backgroundColor: "#E0F2F1", // verde claro
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
   label: {
     fontSize: 15,
     fontWeight: "600",
     color: "#00576B",
-    marginBottom: 8,
   },
   valor: {
     fontSize: 15,

@@ -31,17 +31,32 @@ export default function FaleConosco() {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>📧 E-mail</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="mail-outline" size={20} color="#003D4C" />
+              </View>
+              <Text style={styles.label}>E-mail</Text>
+            </View>
             <Text style={styles.valor}>suporte@chavederoda.com.br</Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>📞 Telefone</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="call-outline" size={20} color="#003D4C" />
+              </View>
+              <Text style={styles.label}>Telefone</Text>
+            </View>
             <Text style={styles.valor}>0800 123 456</Text>
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.label}>⏰ Atendimento</Text>
+            <View style={styles.labelContainer}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="time-outline" size={20} color="#003D4C" />
+              </View>
+              <Text style={styles.label}>Atendimento</Text>
+            </View>
             <Text style={styles.valor}>Segunda a sexta, das 08h às 18h</Text>
           </View>
         </ScrollView>
@@ -94,11 +109,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
   },
+  labelContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  iconCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 16,
+    backgroundColor: "#E0F2F1",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
   label: {
     fontSize: 15,
     fontWeight: "600",
     color: "#00576B",
-    marginBottom: 8,
   },
   valor: {
     fontSize: 15,

@@ -76,7 +76,7 @@ export default function MinhasQuilometragens() {
           {veiculos.map((v) => (
             <View key={v.id} style={styles.vehicleCard}>
               <View style={styles.circleIcon}>
-                <Ionicons name="car-outline" size={24} color="#003d4c" />
+               <Ionicons name="car-sport-outline" size={23} color="#003D4C" />
               </View>
               <View style={{ marginLeft: 12 }}>
                 <Text style={styles.vehiclePlate}>{v.placa}</Text>

@@ -34,9 +34,18 @@ export default function BottomBar() {
             <TouchableOpacity
               key={label}
               onPress={() => handlePress(label, route)}
-              style={styles.bottomTabButton}
+              style={[
+                styles.bottomTabButton,
+                focused && { borderRadius: 20, overflow: "hidden" },
+              ]}
+              activeOpacity={0.7}
             >
-              <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
+              <View
+                style={[
+                  styles.iconWrapper,
+                  focused && styles.iconWrapperActive,
+                ]}
+              >
                 <Ionicons
                   name={icon}
                   size={focused ? 28 : 24}
@@ -76,14 +85,18 @@ const styles = {
   bottomTabButton: {
     justifyContent: "center",
     alignItems: "center",
-    
+    borderRadius: 15,       // garante arredondamento do botão
+    overflow: "hidden",     // necessário para que borderRadius funcione bem no Android
+    paddingVertical: 5,     // dá um pouco de espaço interno vertical
+    paddingHorizontal: 12,  // e horizontal
   },
   iconWrapper: {
-    padding: 5,
+    padding: 2,
     borderRadius: 20,
   },
   iconWrapperActive: {
     backgroundColor: "#E0F2F1",
+    borderRadius: 25,
   },
   bottomTabText: {
     fontSize: 12,

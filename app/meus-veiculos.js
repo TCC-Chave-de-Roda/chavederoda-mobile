@@ -1,18 +1,18 @@
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
   FlatList,
   Image,
   Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import * as ImagePicker from "expo-image-picker";
 
 export default function MeusVeiculos() {
   const router = useRouter();
@@ -146,7 +146,7 @@ export default function MeusVeiculos() {
               </TouchableOpacity>
 
               <View style={styles.card}>
-                {/* Círculo com foto */}
+                {/* Círculo com foto ou ícone padrão do carro */}
                 <TouchableOpacity
                   onPress={() => escolherFoto(item.id)}
                   style={styles.circuloImagem}
@@ -154,11 +154,11 @@ export default function MeusVeiculos() {
                   {item.foto ? (
                     <Image source={{ uri: item.foto }} style={styles.foto} />
                   ) : (
-                    <Ionicons name="car-outline" size={28} color="#003D4C" />
+                    <Ionicons name="car-sport-outline" size={23} color="#003D4C" />
                   )}
                 </TouchableOpacity>
 
-                {/* Placa - agora abre modal */}
+                {/* Placa - abre modal */}
                 <TouchableOpacity
                   onPress={() => abrirModalPlaca(item)}
                   style={styles.placaContainer}
@@ -185,7 +185,6 @@ export default function MeusVeiculos() {
         >
           <View style={styles.modalOverlay}>
             <View style={[styles.modalContent, { width: "100%" }]}>
-              {/* aumentei a largura aqui */}
               <Text style={styles.modalTitle}>Opções do Veículo</Text>
               <Text style={styles.modalDescription}>
                 Selecione uma opção para seu veículo:
@@ -193,19 +192,18 @@ export default function MeusVeiculos() {
 
               <TouchableOpacity
                 style={[
-  styles.modalButton,
-  {
-    backgroundColor: "#fff",     // fundo branco
-    borderWidth: 1,
-    borderColor: "#f5f5f5",         // borda cinza
-    marginBottom: 15,
-    elevation: 2,
-  }
-]}
-
+                  styles.modalButton,
+                  {
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#f5f5f5",
+                    marginBottom: 15,
+                    elevation: 2,
+                  },
+                ]}
                 onPress={() => {
                   setModalVisible(false);
-                  router.push(`/historico/${veiculoModal?.id}`);
+                  router.push(`/historico-realizado/${veiculoModal?.id}`);
                 }}
               >
                 <Text style={styles.modalButtonText}>
@@ -222,6 +220,21 @@ export default function MeusVeiculos() {
               >
                 <Text style={[styles.modalButtonText, { color: "#003d4c" }]}>
                   Visualize os serviços pendentes do seu veículo
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[
+                  styles.modalButton,
+                  {
+                    backgroundColor: "#f5f5f5",
+                    marginTop: 10,
+                  },
+                ]}
+                onPress={fecharModal}
+              >
+                <Text style={[styles.modalButtonText, { color: "#003D4C" }]}>
+                  Cancelar
                 </Text>
               </TouchableOpacity>
             </View>
@@ -244,25 +257,38 @@ export default function MeusVeiculos() {
                 value={novoApelido}
                 onChangeText={setNovoApelido}
               />
-              <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginTop: 20,
+                }}
+              >
                 <TouchableOpacity
-                  style={[styles.modalButton, { backgroundColor: "#E0F2F1", flex: 1, marginRight: 10 }]}
+                  style={[
+                    styles.modalButton,
+                    { backgroundColor: "#E0F2F1", flex: 1, marginRight: 10 },
+                  ]}
                   onPress={fecharModalEditarApelido}
                 >
-                  <Text style={[styles.modalButtonText, { color: "#003d4c" }]}>Cancelar</Text>
+                  <Text
+                    style={[styles.modalButtonText, { color: "#003d4c" }]}
+                  >
+                    Cancelar
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                 style={[styles.modalButton, { backgroundColor: "#003d4c", flex: 1 }]}
+                  style={[styles.modalButton, { backgroundColor: "#003d4c", flex: 1 }]}
                   onPress={salvarApelido}
                 >
-                  <Text style={[styles.modalButtonText, { color: "#fff" }]}>Salvar</Text>
-
+                  <Text style={[styles.modalButtonText, { color: "#fff" }]}>
+                    Salvar
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </Modal>
-
       </View>
     </SafeAreaView>
   );
@@ -328,7 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#003D4C",
-    marginBottom: 4
+    marginBottom: 4,
   },
   card: {
     flexDirection: "row",
@@ -343,8 +369,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   circuloImagem: {
-    width: 55,
-    height: 55,
+    width: 50,
+    height: 50,
     borderRadius: 30,
     backgroundColor: "#E0F2F1",
     justifyContent: "center",
@@ -396,12 +422,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: "#003D4C",
     textAlign: "center",
-
   },
   modalButton: {
     borderRadius: 9,
     paddingVertical: 14,
-    paddingHorizontal:15,
+    paddingHorizontal: 15,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -418,7 +443,7 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     color: "#003D4C",
-    backgroundColor: "#Fff",
-    elevation: 2
+    backgroundColor: "#fff",
+    elevation: 2,
   },
 });

@@ -1,14 +1,14 @@
+import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React from "react";
 import {
   SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 
 export default function MinhaConta() {
   const router = useRouter();
@@ -30,28 +30,58 @@ export default function MinhaConta() {
         </Text>
 
         <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Nome */}
           <View style={styles.card}>
-            <Text style={styles.label}>👤 Nome completo</Text>
+            <View style={styles.labelRow}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="person-outline" size={18} color="#003D4C" />
+              </View>
+              <Text style={styles.labelText}>Nome completo</Text>
+            </View>
             <Text style={styles.valor}>João da Silva</Text>
           </View>
 
+          {/* E-mail */}
           <View style={styles.card}>
-            <Text style={styles.label}>📧 E-mail</Text>
+            <View style={styles.labelRow}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="mail-outline" size={18} color="#003D4C" />
+              </View>
+              <Text style={styles.labelText}>E-mail</Text>
+            </View>
             <Text style={styles.valor}>joao@email.com</Text>
           </View>
 
+          {/* Telefone */}
           <View style={styles.card}>
-            <Text style={styles.label}>📱 Telefone</Text>
+            <View style={styles.labelRow}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="call-outline" size={18} color="#003D4C" />
+              </View>
+              <Text style={styles.labelText}>Telefone</Text>
+            </View>
             <Text style={styles.valor}>(11) 98765-4321</Text>
           </View>
 
+          {/* CPF */}
           <View style={styles.card}>
-            <Text style={styles.label}>🆔 CPF</Text>
+            <View style={styles.labelRow}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="card-outline" size={18} color="#003D4C" />
+              </View>
+              <Text style={styles.labelText}>CPF</Text>
+            </View>
             <Text style={styles.valor}>123.456.789-00</Text>
           </View>
 
+          {/* Data de nascimento */}
           <View style={styles.card}>
-            <Text style={styles.label}>🎂 Data de nascimento</Text>
+            <View style={styles.labelRow}>
+              <View style={styles.iconCircle}>
+                <Ionicons name="calendar-outline" size={18} color="#003D4C" />
+              </View>
+              <Text style={styles.labelText}>Data de nascimento</Text>
+            </View>
             <Text style={styles.valor}>01/01/1990</Text>
           </View>
         </ScrollView>
@@ -104,11 +134,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOffset: { width: 0, height: 1 },
   },
-  label: {
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  iconCircle: {
+    width: 30,
+    height: 30,
+    borderRadius: 18,
+    backgroundColor: "#E0F2F1",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+  },
+  labelText: {
     fontSize: 15,
     fontWeight: "600",
     color: "#00576B",
-    marginBottom: 8,
   },
   valor: {
     fontSize: 15,
