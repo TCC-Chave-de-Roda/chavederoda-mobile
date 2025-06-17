@@ -1,6 +1,4 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Modal,
   Pressable,
@@ -11,31 +9,41 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import Toast from 'react-native-toast-message';
 
 export default function MinhasQuilometragens() {
   const router = useRouter();
 
   const [veiculos, setVeiculos] = useState([
-    { id: "1", placa: "ABC-1234", quilometragem: 42000 },
-    { id: "2", placa: "XYZ-5678", quilometragem: 15800 },
+    { id: '1', placa: 'ABC-1234', quilometragem: 42000 },
+    { id: '2', placa: 'XYZ-5678', quilometragem: 15800 },
   ]);
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPlaca, setSelectedPlaca] = useState(null);
-  const [novaQuilometragem, setNovaQuilometragem] = useState("");
+  const [novaQuilometragem, setNovaQuilometragem] = useState('');
 
   const abrirModal = () => {
     setSelectedPlaca(null);
-    setNovaQuilometragem("");
+    setNovaQuilometragem('');
     setModalVisible(true);
   };
 
   const atualizarQuilometragem = () => {
     if (!selectedPlaca || !novaQuilometragem) {
-      alert("Por favor, selecione a placa e informe a nova quilometragem.");
+      Toast.show({
+        type: 'error',
+        text1: 'Atenção',
+        text2: 'Selecione a placa e informe a nova quilometragem.',
+        position: 'bottom',
+        visibilityTime: 3000,
+        bottomOffset: 60,
+      });
       return;
     }
+
     setVeiculos((oldVeiculos) =>
       oldVeiculos.map((v) =>
         v.placa === selectedPlaca
@@ -49,6 +57,7 @@ export default function MinhasQuilometragens() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
+        {/* HEADER */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
@@ -58,9 +67,11 @@ export default function MinhasQuilometragens() {
         </View>
 
         <Text style={styles.description}>
-          Atualize aqui suas quilometragens para receber notificações de manutenções próximas.
+          Atualize aqui suas quilometragens para receber notificações de
+          manutenções próximas.
         </Text>
 
+        {/* BOTÃO PARA ABRIR MODAL */}
         <TouchableOpacity
           style={styles.cardButton}
           activeOpacity={0.7}
@@ -69,35 +80,46 @@ export default function MinhasQuilometragens() {
           <View style={styles.circleIcon}>
             <Ionicons name="pencil-outline" size={20} color="#00695C" />
           </View>
-          <Text style={styles.cardButtonText}>Clique para atualizar a quilometragem</Text>
+          <Text style={styles.cardButtonText}>
+            Clique para atualizar a quilometragem
+          </Text>
         </TouchableOpacity>
 
+        {/* LISTA DE VEÍCULOS */}
         <ScrollView style={{ marginTop: 10, marginBottom: 20 }}>
           {veiculos.map((v) => (
             <View key={v.id} style={styles.vehicleCard}>
               <View style={styles.circleIcon}>
-               <Ionicons name="car-sport-outline" size={23} color="#003D4C" />
+                <Ionicons
+                  name="car-sport-outline"
+                  size={23}
+                  color="#003D4C"
+                />
               </View>
               <View style={{ marginLeft: 12 }}>
                 <Text style={styles.vehiclePlate}>{v.placa}</Text>
-                <Text style={styles.vehicleKm}>Quilometragem: {v.quilometragem} km</Text>
+                <Text style={styles.vehicleKm}>
+                  Quilometragem: {v.quilometragem} km
+                </Text>
               </View>
             </View>
           ))}
         </ScrollView>
 
-        {/* Modal Atualizado */}
+        {/* MODAL */}
         <Modal
           visible={modalVisible}
           animationType="slide"
-          transparent={true}
+          transparent
           onRequestClose={() => setModalVisible(false)}
         >
           <View style={styles.modalOverlay}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalTitle}>Atualizar Quilometragem</Text>
 
-              <Text style={styles.modalLabel}>Selecione a placa que deseja atualizar:</Text>
+              <Text style={styles.modalLabel}>
+                Selecione a placa que deseja atualizar:
+              </Text>
               {veiculos.map((v) => (
                 <TouchableOpacity
                   key={v.id}
@@ -110,7 +132,8 @@ export default function MinhasQuilometragens() {
                   <Text
                     style={[
                       styles.placaOptionText,
-                      selectedPlaca === v.placa && styles.placaOptionTextSelected,
+                      selectedPlaca === v.placa &&
+                        styles.placaOptionTextSelected,
                     ]}
                   >
                     {v.placa}
@@ -120,11 +143,11 @@ export default function MinhasQuilometragens() {
 
               <TextInput
                 style={styles.input}
-                placeholder=" digite aqui sua nova quilometragem"
+                placeholder="Digite aqui sua nova quilometragem"
                 keyboardType="numeric"
                 value={novaQuilometragem}
                 onChangeText={setNovaQuilometragem}
-                placeholderTextColor="#003d4c"
+                placeholderTextColor="#003D4C"
               />
 
               <View style={styles.modalButtons}>
@@ -132,14 +155,21 @@ export default function MinhasQuilometragens() {
                   style={[styles.modalButton, styles.cancelButton]}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={[styles.modalButtonText, { color: "#003D4C" }]}>Cancelar</Text>
+                  <Text
+                    style={[styles.modalButtonText, { color: '#003D4C' }]}
+                  >
+                    Cancelar
+                  </Text>
                 </Pressable>
-
                 <Pressable
                   style={[styles.modalButton, styles.saveButton]}
                   onPress={atualizarQuilometragem}
                 >
-                  <Text style={[styles.modalButtonText, { color: "#fff" }]}>Salvar</Text>
+                  <Text
+                    style={[styles.modalButtonText, { color: '#fff' }]}
+                  >
+                    Salvar
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -151,21 +181,15 @@ export default function MinhasQuilometragens() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: "#F9FAFB",
-  },
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
+  safeArea: { flex: 1, backgroundColor: '#F9FAFB' },
+  container: { flex: 1, paddingHorizontal: 20 },
   header: {
     marginTop: 55,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  title: {
+ title: {
     fontSize: 28,
     fontWeight: "700",
     color: "#003D4C",
@@ -174,30 +198,30 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 15,
-    color: "#003D4C",
-    textAlign: "center",
+    color: '#003D4C',
+    textAlign: 'center',
     marginTop: 14,
     marginBottom: 25,
     lineHeight: 22,
     paddingHorizontal: 8,
   },
   cardButton: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     borderRadius: 14,
     paddingVertical: 18,
     paddingHorizontal: 16,
-    alignItems: "center",
+    alignItems: 'center',
     elevation: 5,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.5,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 3 },
     marginBottom: 25,
   },
   cardButtonText: {
-    color: "#003D4C",
-    fontWeight: "600",
+    color: '#003D4C',
+    fontWeight: '600',
     fontSize: 15.5,
     marginLeft: 10,
   },
@@ -205,110 +229,94 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#E0F2F1",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#E0F2F1',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   vehicleCard: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     borderRadius: 14,
     paddingVertical: 15,
     paddingHorizontal: 20,
     marginBottom: 15,
-    alignItems: "center",
+    alignItems: 'center',
     elevation: 3,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.06,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 3 },
   },
-  vehiclePlate: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#003D4C",
-  },
-  vehicleKm: {
-    fontSize: 14,
-    color: "#546E7A",
-    marginTop: 4,
-  },
+  vehiclePlate: { fontSize: 16, fontWeight: '600', color: '#003D4C' },
+  vehicleKm: { fontSize: 14, color: '#546E7A', marginTop: 4 },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.11)",
-    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.11)',
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   modalContainer: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 8,
     padding: 18,
   },
   modalTitle: {
     fontSize: 23,
-    fontWeight: "700",
-    color: "#003D4C",
+    fontWeight: '700',
+    color: '#003D4C',
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   modalLabel: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#003D4C",
+    fontWeight: '600',
+    color: '#003D4C',
     marginBottom: 12,
   },
   placaOption: {
     paddingVertical: 14,
     paddingHorizontal: 15,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: "#f5f5f5",
+    borderColor: '#f5f5f5',
     elevation: 2,
   },
   placaOptionSelected: {
-    backgroundColor: "#003D4C",
-    borderColor: "#003D4C",
+    backgroundColor: '#003D4C',
+    borderColor: '#003D4C',
   },
   placaOptionText: {
-    color: "#003d4c",
-    fontWeight: "600",
+    color: '#003D4C',
+    fontWeight: '600',
     fontSize: 16,
   },
   placaOptionTextSelected: {
-    color: "white",
+    color: '#fff',
   },
   input: {
-    backgroundColor: "#F0F7F6",
+    backgroundColor: '#F0F7F6',
     borderWidth: 1.5,
-    borderColor: "#f0f7f6",
+    borderColor: '#f0f7f6',
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 12,
     fontSize: 16,
     marginBottom: 30,
-    color: "#003D4C",
+    color: '#003D4C',
   },
   modalButtons: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 14,
+    paddingVertical: 16,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  cancelButton: {
-    backgroundColor: "#E0F2F1",
-    marginRight: 12,
-  },
-  saveButton: {
-    backgroundColor: "#003D4C",
-  },
-  modalButtonText: {
-    fontWeight: "700",
-    fontSize: 16,
-  },
+  cancelButton: { backgroundColor: '#E0F2F1', marginRight: 12 },
+  saveButton: { backgroundColor: '#003D4C' },
+  modalButtonText: { fontWeight: '700', fontSize: 16 },
 });
