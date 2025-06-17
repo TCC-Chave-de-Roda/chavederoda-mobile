@@ -6,17 +6,28 @@
   },
   "build": {
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "android": {
+        "developmentClient": true,
+        "distribution": "internal"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "android": {
+        "distribution": "internal"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "android": {
+        "autoIncrement": true
+      }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./service-account.json",
+        "track": "production"
+      }
+    }
   }
 }
