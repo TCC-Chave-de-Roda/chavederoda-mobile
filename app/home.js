@@ -8,6 +8,7 @@ import {
   View,
   ScrollView,
   Pressable,
+  StyleSheet,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -64,7 +65,7 @@ export default function Home() {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#F9FAFB" }}>
+    <View style={styles.screen}>
       <SafeAreaView edges={["top"]} style={{ flex: 1 }}>
         <ScrollView
           contentContainerStyle={styles.container}
@@ -80,7 +81,7 @@ export default function Home() {
           <View style={styles.promoContainer}>
             <Image
               source={promoImages[promoIndex]}
-              style={{ width: "100%", height: "100%" }}
+              style={styles.promoImage}
               resizeMode="cover"
             />
           </View>
@@ -119,7 +120,11 @@ export default function Home() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#F9FAFB",
+  },
   container: {
     paddingHorizontal: 20,
     paddingTop: 40,
@@ -129,11 +134,11 @@ const styles = {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 13,
-    gap:10,
+    gap: 10,
   },
   welcomeText: {
     color: "#003D4C",
-    fontSize: 23,
+    fontSize: 25,
     fontWeight: "500",
   },
   promoContainer: {
@@ -144,12 +149,15 @@ const styles = {
     backgroundColor: "#eee",
     marginBottom: 24,
   },
+  promoImage: {
+    width: "100%",
+    height: "100%",
+  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: "600",
     color: "#003D4C",
     marginBottom: 9,
-
   },
   cardSection: {
     gap: 13,
@@ -170,7 +178,7 @@ const styles = {
     width: 36,
     height: 36,
     borderRadius: 100,
-    backgroundColor: "#E0F2F1", // verde claro da paleta
+    backgroundColor: "#E0F2F1",
     justifyContent: "center",
     alignItems: "center",
     marginRight: 14,
@@ -185,4 +193,4 @@ const styles = {
     color: "#6B7280",
     marginTop: 2,
   },
-};
+});

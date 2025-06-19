@@ -13,7 +13,6 @@ import { useRouter } from "expo-router";
 export default function Promocoes() {
   const router = useRouter();
 
-  // Lista de promoções com nome da oficina que lançou
   const promocoes = [
     {
       iconName: "pricetag-outline",
@@ -40,30 +39,34 @@ export default function Promocoes() {
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backTouch}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            style={styles.backButton}
+          >
             <Ionicons name="chevron-back-outline" size={28} color="#003D4C" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Promoções</Text>
+          {/* Placeholder para alinhar título */}
           <View style={{ width: 28 }} />
         </View>
 
-        {/* Texto explicativo */}
-        <Text style={styles.subtitulo}>
+        {/* Subtítulo */}
+        <Text style={styles.subtitle}>
           Fique por dentro das ofertas das suas oficinas parceiras!
         </Text>
 
+        {/* Lista de promoções */}
         <ScrollView showsVerticalScrollIndicator={false}>
           {promocoes.map((promo, index) => (
             <View key={index} style={styles.card}>
-              <View style={styles.linhaTitulo}>
-                <View style={styles.iconWrapper}>
+              <View style={styles.labelRow}>
+                <View style={styles.iconCircle}>
                   <Ionicons name={promo.iconName} size={20} color="#00695C" />
                 </View>
-
                 <View style={{ flex: 1 }}>
                   <Text style={styles.label}>{promo.titulo}</Text>
-                  <Text style={styles.valor}>{promo.descricao}</Text>
-                  <View style={styles.oficinaContainer}>
+                  <Text style={styles.value}>{promo.descricao}</Text>
+                  <View style={styles.oficinaRow}>
                     <Ionicons
                       name="business-outline"
                       size={14}
@@ -82,6 +85,7 @@ export default function Promocoes() {
   );
 }
 
+// Estilos padronizados
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -97,17 +101,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  backTouch: {
+  backButton: {
     padding: 6,
   },
   headerTitle: {
+    flex: 1,
+    textAlign: "center",
     fontSize: 28,
     fontWeight: "700",
     color: "#003D4C",
-    textAlign: "center",
-    flex: 1,
   },
-  subtitulo: {
+  subtitle: {
     fontSize: 15,
     color: "#003D4C",
     marginTop: 8,
@@ -126,15 +130,15 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 2,
   },
-  linhaTitulo: {
+  labelRow: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 12,
   },
-  iconWrapper: {
+  iconCircle: {
     width: 36,
     height: 36,
-    borderRadius: 100,
+    borderRadius: 18,
     backgroundColor: "#E0F2F1",
     justifyContent: "center",
     alignItems: "center",
@@ -146,18 +150,18 @@ const styles = StyleSheet.create({
     color: "#003D4C",
     marginBottom: 4,
   },
-  valor: {
+  value: {
     fontSize: 14,
     color: "#37474F",
     marginBottom: 6,
   },
-  oficinaContainer: {
+  oficinaRow: {
     flexDirection: "row",
     alignItems: "center",
   },
   oficina: {
     fontSize: 13,
-    color: "#007C91",
     fontWeight: "600",
+    color: "#007C91",
   },
 });

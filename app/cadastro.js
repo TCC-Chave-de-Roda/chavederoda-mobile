@@ -1,200 +1,113 @@
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, useWindowDimensions, View } from 'react-native';
-import Toast from 'react-native-toast-message';
+import React from 'react';
+import {
+  Image,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 
-export default function CadastroScreen() {
-  const { width } = useWindowDimensions();
-
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [confirmarSenha, setConfirmarSenha] = useState('');
-  const [mostrarSenha, setMostrarSenha] = useState(false);
-
-  const senhaValida = senha.length >= 8 && /[A-Z]/.test(senha) && /\d/.test(senha);
-  const senhasIguais = senha === confirmarSenha;
-  const podeCadastrar = nome && email && senhaValida && senhasIguais;
+export default function WelcomeScreen() {
+  const { width, height } = useWindowDimensions();
 
   return (
-    <View style={styles.container}>
-
-      {/* 🔙 Botão Voltar */}
-      <TouchableOpacity onPress={() => router.back()} style={styles.botaoVoltar}>
-        <Ionicons name="chevron-back-outline" size={30} color="#003D4C" />
-      </TouchableOpacity>
-
-      {/* Logo */}
-      <View style={styles.logoContainer}>
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.innerContainer, { paddingHorizontal: width * 0.05 }]}>
+        {/* Imagem/logo */}
         <Image
           source={require('../assets/images/splash-chave.png')}
-          style={[styles.logo, { width: width * 0.3, height: width * 0.3 }]}
+          style={[
+            styles.logo,
+            {
+              width: width * 0.4,
+              height: width * 0.4,
+            },
+          ]}
           resizeMode="contain"
         />
+
+        {/* Texto principal */}
+        <Text
+          style={[
+            styles.mainText,
+            {
+              fontSize: width * 0.045,
+              marginTop: height * 0.03,
+              marginHorizontal: width * 0.1,
+            },
+          ]}
+        >
+          Mantenha seu histórico de serviços sempre à mão. Entre e experimente a excelência que você merece.
+        </Text>
+
+        {/* Botões */}
+        <View style={[styles.buttonContainer, { marginTop: height * 0.05 }]}>
+          {[
+            { label: 'Fazer login', route: '/login' },
+            { label: 'Cadastre-se', route: '/cadastro' },
+          ].map((btn) => (
+            <TouchableOpacity
+              key={btn.route}
+              style={[
+                styles.button,
+                {
+                  paddingVertical: height * 0.015,
+                  marginBottom: height * 0.025,
+                },
+              ]}
+              onPress={() => router.push(btn.route)}
+            >
+              <Text style={[styles.buttonText, { fontSize: width * 0.05 }]}>
+                {btn.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
-
-      <Text style={styles.titulo}>Crie sua conta</Text>
-
-      <View style={styles.campo}>
-        <Ionicons name="person-outline" size={20} color="#003D4C" />
-        <TextInput
-          style={styles.input}
-          placeholder="Nome completo"
-          placeholderTextColor="#003D4C"
-          value={nome}
-          onChangeText={setNome}
-        />
-      </View>
-
-      <View style={styles.campo}>
-        <Ionicons name="mail-outline" size={20} color="#003D4C" />
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          placeholderTextColor="#003D4C"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
-
-      <View style={styles.campo}>
-        <Ionicons name="lock-closed-outline" size={20} color="#003D4C" />
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#003D4C"
-          secureTextEntry={!mostrarSenha}
-          value={senha}
-          onChangeText={setSenha}
-        />
-        <TouchableOpacity onPress={() => setMostrarSenha(!mostrarSenha)}>
-          <Ionicons name={mostrarSenha ? 'eye-off-outline' : 'eye-outline'} size={20} color="#003D4C" />
-        </TouchableOpacity>
-      </View>
-      {!senhaValida && senha.length > 0 && (
-        <Text style={styles.erro}>Use no mínimo 8 caracteres, com 1 letra maiúscula e 1 número.</Text>
-      )}
-
-      <View style={styles.campo}>
-        <Ionicons name="lock-closed-outline" size={20} color="#003D4C" />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirmar senha"
-          placeholderTextColor="#003D4C"
-          secureTextEntry={!mostrarSenha}
-          value={confirmarSenha}
-          onChangeText={setConfirmarSenha}
-        />
-      </View>
-      {!senhasIguais && confirmarSenha.length > 0 && (
-        <Text style={styles.erro}>As senhas não coincidem.</Text>
-      )}
-
-      <TouchableOpacity
-        style={[styles.botao, { backgroundColor: podeCadastrar ? '#003d4c' : '#003D4C' }]}
-        onPress={() => {
-          if (podeCadastrar) {
-            Toast.show({
-              type: 'success',
-              text1: 'Sucesso!',
-              text2: 'Cadastro realizado com sucesso 👏',
-              visibilityTime: 1000,
-            });
-
-            setTimeout(() => {
-              router.replace('/login');
-            }, 2000);
-          }
-        }}
-        disabled={!podeCadastrar}
-      >
-        <Text style={styles.textoBotao}>Cadastrar</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => router.push('/login')}>
-        <Text style={styles.link}>Já tem uma conta? Fazer login</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFBAA',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 80,
+    backgroundColor: '#F8FAFC',
   },
-  botaoVoltar: {
-    position: 'absolute',
-    top: 40,
-    left: 20,
-    zIndex: 1,
-  },
-  logoContainer: {
-    height: 120,
+  innerContainer: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 10,
   },
   logo: {
-    opacity: 0.9,
+    maxWidth: 200,
+    maxHeight: 300,
   },
-  titulo: {
-    fontSize: 28,
-    fontWeight: 'bold',
+  mainText: {
+    textAlign: 'center',
+    fontWeight: '600',
     color: '#003D4C',
-    marginBottom: 30,
   },
-  campo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderColor: '#003D4C',
-    borderWidth: 1.5,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 12,
-    width: '100%',
-    backgroundColor: '#F9FAFBAA',
-    shadowColor: '#F9FAFBAA',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  input: {
-    flex: 1,
-    height: 45,
-    paddingLeft: 10,
-    color: '#003D4C',
-    fontWeight: '500',
-    outlineWidth:0
-  },
-  botao: {
-    marginTop: 20,
-    paddingVertical: 12,
-    borderRadius: 10,
+  buttonContainer: {
     width: '100%',
     alignItems: 'center',
   },
-  textoBotao: {
+  button: {
+    backgroundColor: '#003D4C',
+    width: '90%',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#003d4c',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: Platform.OS === 'android' ? 3 : 0,
+  },
+  buttonText: {
     color: 'white',
-    fontSize: 18,
     fontWeight: 'bold',
-  },
-  erro: {
-    color: '#DC2626',
-    fontSize: 13,
-    alignSelf: 'flex-start',
-    marginBottom: 5,
-  },
-  link: {
-    color: '#003D4C',
-    fontSize: 14,
-    marginTop: 20,
-    textDecorationLine: 'underline',
   },
 });
