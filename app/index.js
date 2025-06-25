@@ -1,4 +1,4 @@
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -12,7 +12,13 @@ import {
 } from 'react-native';
 
 export default function WelcomeScreen() {
+  const router = useRouter();
   const { width, height } = useWindowDimensions();
+
+  const buttons = [
+    { label: 'Fazer login', route: 'login' },
+    { label: 'Cadastre-se', route: 'cadastro' },
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,13 +26,7 @@ export default function WelcomeScreen() {
         {/* Imagem/logo */}
         <Image
           source={require('../assets/images/splash-chave.png')}
-          style={[
-            styles.logo,
-            {
-              width: width * 0.4,
-              height: width * 0.4,
-            },
-          ]}
+          style={{ width: width * 0.4, height: width * 0.4 }}
           resizeMode="contain"
         />
 
@@ -46,24 +46,17 @@ export default function WelcomeScreen() {
 
         {/* Botões */}
         <View style={[styles.buttonContainer, { marginTop: height * 0.05 }]}>
-          {[
-            { label: 'Fazer login', route: '/login' },
-            { label: 'Cadastre-se', route: '/cadastro' },
-          ].map((btn) => (
+          {buttons.map((btn) => (
             <TouchableOpacity
               key={btn.route}
-              style={[
-                styles.button,
-                {
-                  paddingVertical: height * 0.015,
-                  marginBottom: height * 0.025,
-                },
-              ]}
-              onPress={() => router.push(btn.route)}
+              style={[styles.button, { paddingVertical: height * 0.015, marginBottom: height * 0.025 }]}
+              onPress={() => {
+                console.log(`Clicou em: ${btn.label}`);
+                router.push(btn.route);
+              }}
+              activeOpacity={0.7}
             >
-              <Text style={[styles.buttonText, { fontSize: width * 0.05 }]}>
-                {btn.label}
-              </Text>
+              <Text style={[styles.buttonText, { fontSize: width * 0.05 }]}>{btn.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -81,10 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  logo: {
-    maxWidth: 200,
-    maxHeight: 300,
   },
   mainText: {
     textAlign: 'center',
