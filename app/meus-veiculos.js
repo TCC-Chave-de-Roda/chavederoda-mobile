@@ -20,10 +20,10 @@ export default function MeusVeiculos() {
   const [veiculos, setVeiculos] = useState([
     {
       id: "1",
-      modelo: "Fiat Argo",
+      modelo: "Mini Cooper",
       placa: "ABC-1234",
-      cor: "Branco",
-      apelido: "Meu Argo",
+      cor: "Bege",
+      apelido: "Minizinho",
       foto: null,
     },
     {
